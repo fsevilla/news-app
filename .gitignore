@@ -1,0 +1,20 @@
+# Output
+/dist
+/tmp
+
+# Transpiled
+/src/**/*.js
+!/src/**/*.spec.js
+
+# Dependencies
+/node_modules
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# System
+.DS_Store

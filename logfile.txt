@@ -1,0 +1,22 @@
+********************************************************************************
+LOGFILE: News App
+Este archivo llevará un registro de los cambios realizados sesión tras sesión
+********************************************************************************
+Lunes 7/9/2020: 
+Se creó la estructura de carpetas e inicializó el proyecto a través de npm init. 
+Se agregaron los archivos de configuración tsconfig.json y gulpfile.js 
+Se instalaron las librerías para ejecutar las tareas de gulp (Ver gulpfile)
+
+Jueves 7/9/2020: 
+Se instalaron babel y browserify
+Se completó el archivo de configuración de gulp para construir el bundle final (producción)
+Se agregó un listado simple de noticias en el HTML
+
+Lunes 14/9/2020:
+Se agregó uglify al generar el bundle de JS
+Se agregó Handlebars a través de CDN en el index.HTML
+Se actualizó el template para incluir funciones de Handlebars
+
+Jueves 17/9/2020
+Se instaló jest y se agregaron pruebas unitarias para validar los templates mediante Handlebars
+así como las llamadas asíncronas mediante el uso de fetch (node-fetch)
