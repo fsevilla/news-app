@@ -1,0 +1,8 @@
+<header>
+  <span>Menu</span>
+  <ul>
+    <% menuItems.forEach(item => { %>
+      <li><a href="<%= item.path %>"><%= item.label %></a></li>
+    <% }) %>
+  </ul>
+</header>

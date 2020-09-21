@@ -4,33 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>News App</title>
-  <!-- build:css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild -->
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
-  <!-- build:js -->
-  <script src="app.js" type="module"></script>
-  <!-- endbuild -->
+  <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 <body>
-  <!-- Inicio del Heading -->
-  <h1 id="heading">
-    {{! Otro comentario}}
-    {{title}}
-  </h1>
-  <!-- Fin del Heading -->
+  <%- include('./partials/header') %>
+  <h1 id="heading"><%= title %></h1>
 
   <div id="news-container">
     <div class="grid">
-      \{{#each headline}}
+      {{#each headline}}
       <div class="sm-50 md-25">
-        <a href="\{{url}}">\{{title}}</a>
+        <a href="{{url}}">{{title}}</a>
       </div>
-      \{{else}}
+      {{else}}
         <div class="xs-100">No hay elementos para mostrar</div>
-      \{{/each}}
+      {{/each}}
     </div>
   </div>
+  <script>
+    localStorage.setItem('apiKey', '<%= apiKey %>');
+  </script>
+  <script src="assets/scripts/app.js" type="module"></script>
 </body>
 </html>

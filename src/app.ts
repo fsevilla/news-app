@@ -11,7 +11,7 @@ export function setPageTitle() {
 }
 
 function getHeadlines() {
-  const url:string = 'https://newsapi.org/v2/top-headlines?country=us&apiKey={news_api_key}';
+  const url:string = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=59a12e101caf4769b2cf2cb82b677ef3';
 
   ajax.get(url).then(data => {
     let source = document.getElementById('news-container').innerHTML;

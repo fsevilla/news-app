@@ -2,9 +2,15 @@
 /dist
 /tmp
 
-# Transpiled
+# Environment
+.env
+
+# Typescript
 /src/**/*.js
 !/src/**/*.spec.js
+
+# Sass
+/src/styles/**/*.css
 
 # Dependencies
 /node_modules
