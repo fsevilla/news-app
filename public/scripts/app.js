@@ -7,8 +7,7 @@ export function setPageTitle() {
     document.getElementById('heading').innerHTML = mainTemplate(context);
 }
 function getHeadlines() {
-    const apiKey = localStorage.getItem('apiKey');
-    const url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='+apiKey;
+    const url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=59a12e101caf4769b2cf2cb82b677ef3';
     ajax.get(url).then(data => {
         let source = document.getElementById('news-container').innerHTML;
         let template = Handlebars.compile(source);

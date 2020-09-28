@@ -1,0 +1,19 @@
+<h1>Noticias Recientes</h1>
+<div id="news-list" class="grid">
+  {{#each noticias}}
+  <div class="sm-50 md-25">
+    <a href="{{url}}">
+      {{#if urlToImage}}
+      <img src="{{urlToImage}}" alt="">
+      {{else}}
+      <img src="https://sisterhoodofstyle.com/wp-content/uploads/2018/02/no-image-1.jpg" alt="">
+      {{/if}}
+      {{title}}
+    </a>
+  </div>
+  {{else}}
+  <div>
+    <p>No hay noticias</p>
+  </div>
+  {{/each}}
+</div>

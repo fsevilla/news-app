@@ -180,6 +180,31 @@ html, body {
   background-color: #fff;
 }
 
-.grid > div {
-  background-color: lightblue;
+header {
+  padding: 12px;
+  background-color: darkblue;
+  color: lightblue;
+}
+header > span {
+  font-size: 24px;
+  font-weight: bold;
+}
+header ul {
+  list-style: none;
+  display: inline-block;
+}
+header ul li {
+  display: inline-block;
+  margin-left: 10px;
+}
+header ul li a {
+  color: lightblue;
+}
+
+#news-list > div {
+  height: 250px;
+  border: solid 1px #ddd;
+}
+#news-list > div img {
+  width: 100%;
 }

@@ -8,8 +8,44 @@ html, body {
   background-color: #fff;
 }
 
-.grid {
+// .grid {
+//   > div {
+//     background-color: lightblue;
+//   }
+// }
+
+header {
+  padding: 12px;
+  background-color: darkblue;
+  color: lightblue;
+
+  > span {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    display: inline-block;
+
+    li {
+      display: inline-block;
+      margin-left: 10px;
+
+      a {
+        color: lightblue;
+      }
+    }
+  }
+}
+
+#news-list {
   > div {
-    background-color: lightblue;
+    height: 250px;
+    border: solid 1px #ddd;
+
+    img {
+      width: 100%;
+    }
   }
 }
