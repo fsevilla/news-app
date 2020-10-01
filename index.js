@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
 const handlebars = require('express-handlebars');
-const axios = require('axios');
+const apiRoutes = require('./routes');
+
+const news = require('./news');
+
+const apiNews = require('./api');
 
 require('dotenv').config();
 
@@ -14,30 +18,11 @@ app.set('views', 'src/views');
 
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
-const apiUrl = process.env.API_URL;
-const apiKey = process.env.API_KEY;
+news(app);
 
-app.get('/recientes', function(req, res) {
-  const url = `${apiUrl}/top-headlines?country=mx&apiKey=${apiKey}`;
-  axios.get(url).then(response => {
-    res.render('index', {
-      noticias: response.data.articles
-    });
-  }).catch(err => {
-    res.send('Failure');
-  });
-});
+// app.use('/api/v1', apiNews);
+app.use('/api', apiRoutes);
 
-app.get('/', function(req, res) {
-  const url = `${apiUrl}everything?q=bitcoin&sortBy=publishedAt&apiKey=${apiKey}`;
-  axios.get(url).then(response => {
-    res.render('news', {
-      noticias: response.data.articles
-    });
-  }).catch(err => {
-    res.send('Failure');
-  });
-});
 
 app.listen(port, () => {
   console.log('App is running in port ' + port);
