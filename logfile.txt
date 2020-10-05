@@ -20,3 +20,18 @@ Se actualizó el template para incluir funciones de Handlebars
 Jueves 17/9/2020
 Se instaló jest y se agregaron pruebas unitarias para validar los templates mediante Handlebars
 así como las llamadas asíncronas mediante el uso de fetch (node-fetch)
+
+Lunes 21/9/2020
+Se inicializó el proyecto en Git. Se inició la aplicación de node
+
+Jueves 24/9/2020
+Se agregó soporte a EJS desde el servidor y se mantiene la funcionalidad de app.ts para realizar
+las llamadas async desde el cliente 
+
+Lunes 28/9/2020
+Se agrega soporte a Handlebars desde Node y se crea el layout de main.handlebars y la plantilla
+index.handlebars.
+
+Jueves 1/10/2020
+Instalamos y trabajamos con Axios para realizar llamadas al api desde Node. Utilizamos el router 
+de express para definir nuevas rutas. 
