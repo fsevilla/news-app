@@ -3,6 +3,9 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const apiRoutes = require('./routes');
 
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
 const news = require('./news');
 
 const apiNews = require('./api');
@@ -18,9 +21,14 @@ app.set('views', 'src/views');
 
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
+// app.use('/api', )
+
+
 news(app);
 
 // app.use('/api/v1', apiNews);
+app.use('/api', jsonParser);
+
 app.use('/api', apiRoutes);
 
 

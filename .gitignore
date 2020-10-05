@@ -8,6 +8,8 @@
 # Typescript
 /src/**/*.js
 !/src/**/*.spec.js
+!/src/**/*.controller.js
+!/src/models/**/*.js
 
 # Sass
 /src/styles/**/*.css
