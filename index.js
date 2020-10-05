@@ -12,6 +12,8 @@ const apiNews = require('./api');
 
 require('dotenv').config();
 
+require('./src/controllers/db.controller');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
