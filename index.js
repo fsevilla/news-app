@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const handlebars = require('express-handlebars');
+const cors = require('cors');
+
 const apiRoutes = require('./routes');
 
 const bodyParser = require('body-parser');
@@ -23,7 +25,7 @@ app.set('views', 'src/views');
 
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
-// app.use('/api', )
+app.use('/api', cors());
 
 
 news(app);

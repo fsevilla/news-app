@@ -44,7 +44,11 @@ MongoClient.connect(url, {
   useUnifiedTopology: true
 }, function(err, client) {
   
-
+  if(err) {
+    console.log('Failed to connect to the database');
+    return;
+  }
+  
   console.log("Connected successfully to server", err);
  
   const db = client.db('sample_airbnb');

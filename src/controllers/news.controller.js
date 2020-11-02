@@ -6,14 +6,41 @@ const apiKey = process.env.API_KEY;
 
 class News {
   getAll(req, res) {
-    console.log('Query params: ', req.query.test);
-    const url = `${apiUrl}everything?q=bitcoin&sortBy=publishedAt&apiKey=${apiKey}`;
+    const query = req.query.q || '';
+    const domains = req.query.s ? '&domains=' + req.query.s : '';
+    if(query) {
+      const url = `${apiUrl}everything?q=${query}&sortBy=publishedAt${domains}&apiKey=${apiKey}`;
+      axios.get(url).then(response => {
+        res.send(response.data.articles);
+      }).catch(e => {
+        res.send('Oops! Failed to retrieve news');
+        res.end();
+      });
+    } else {
+      res.send([]);
+    }
+  }
+
+  getHeadlines(req, res) {
+    const country = req.query.q || 'mx';
+    const url = `${apiUrl}top-headlines?country=${country}&apiKey=${apiKey}`;
     axios.get(url).then(response => {
       res.send(response.data.articles);
     }).catch(e => {
-      res.send('Oops! Failed!')
+      res.send('Oops! Failed to retrieve headlines');
       res.end();
-    })
+    });
+  }
+
+  getSources(req, res) {
+    const url = `${apiUrl}sources?apiKey=${apiKey}`;
+    axios.get(url).then(response => {
+      res.send(response.data.sources);
+    }).catch(e => {
+      res.send('Oops! Failed to retrieve the sources');
+      console.log('Error', e);
+      res.end();
+    });
   }
 
   getById(req, res) {
@@ -22,4 +49,3 @@ class News {
 }
 
 module.exports = new News();
-
