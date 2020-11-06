@@ -1,69 +1,63 @@
-/*
-
-DB Controller
-  /all => Noticia.getAll 
-
-News controller
-
-  db('noticias').getAll
-    getById
-    crear
-    actualizar
-
-
-Usuarios controller
-
-  db('usuarios').find
-    getById
-    crear
-    actualizar
-
-
-Modelo 
-  DB
-  Noticia
-    .getAll
-    .getId
-
-
-Middleware
-  req.body, req.params, req.query....
-  req.database.find('noticias')
-
-
-MVC
-M - DB
-C - M-tx-V
-V- {}
-*/
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.DB_HOST;
 
-MongoClient.connect(url, {
-  useUnifiedTopology: true
-}, function(err, client) {
-  
-  if(err) {
-    console.log('Failed to connect to the database');
-    return;
-  }
-  
-  console.log("Connected successfully to server", err);
- 
-  const db = client.db('sample_airbnb');
-  
-  const collection = db.collection('listingsAndReviews');
+module.exports = function(collectionName) {
+  return new Promise((success, failure) => {
+    MongoClient.connect(url, {
+      useUnifiedTopology: true
+    }, function(err, client) {
+      
+      if(err) {
+        console.log('Failed to connect to the database');
+        failure(err);
+        return;
+      }
+     
+      const db = client.db();
+      
+      const collection = db.collection(collectionName);
 
-    collection.find({
-      property_type:"House"
-    })
-    .limit(10)
-    .toArray((err, results) => {
-      console.log('Propiedades: ', results);
-      client.close();
+      success({
+        find: (filters, limit) => {
+          filters = filters || {};
+          limit = limit || 25;
+
+          return new Promise((resolve, reject) => {
+            collection.find(filters).limit(limit).toArray((err, results) => {
+              if(err) {
+                reject(err);
+              } else {
+                resolve(results);
+              }
+              client.close();
+            })
+          });
+        },
+        findOne: (filters) => {
+          filters = filters || {};
+          return new Promise((resolve, reject) => {
+            collection.findOne(filters).then((results) => {
+              resolve(results);
+              client.close();
+            }).catch(err => {
+              reject(err);
+            })
+          });
+        },
+        insertOne: (filters) => {
+          filters = filters || {};
+          return new Promise((resolve, reject) => {
+            collection.insertOne(filters).then((result) => {
+              resolve(result);
+              client.close();
+            }).catch(err => {
+              reject(err);
+            })
+          });
+        }
+      });
+      
     });
-  
-});
-
-
+  })
+};
