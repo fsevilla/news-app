@@ -11,6 +11,7 @@ router.get('/domains', newsController.getSources);
 router.get('/news/:noticiaID', newsController.getById);
 
 router.get('/users', usersController.index);
+router.get('/users/:id', usersController.getOne);
 
 // Authentication
 router.post('/auth', usersController.login);

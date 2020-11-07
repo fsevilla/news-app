@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
 
 const Token = require('./../models/token');
+const User = require('./../models/user');
 
 function getHashedPassword(pwd) {
   // const hashedPassword = crypto.createHash('md5').update(pwd).digest('hex');
@@ -14,16 +15,42 @@ function getHashedPassword(pwd) {
 class UserController {
 
   index(req, res) {
-    db('users').then(collection => {
-      collection.find().then(results => {
-        res.send(results);
-      });
+    User.find().then(results => {
+      res.send(results);
     }).catch(err => {
-      res.send(err);
+      console.log('Error usuarios: ', err);
+      res.status(400).send(err);
+    });
+  }
+
+  getOne(req, res) {
+    User.findOne({
+      email: req.query.email
+    }).then(result => {
+      res.send(result);
+    }).catch(err => {
+      res.status(400).send(err);
     })
   }
 
   login(req, res) {
+    const hashedPassword = getHashedPassword(req.body.password);
+    
+    User.validate(req.body.email, hashedPassword).then(result => {
+      console.log('Result usuario', result);
+      Token.create(result._id).then(tokenResult => {
+        console.log('Created token: ', tokenResult);
+        res.send(tokenResult.ops[0]);
+      }).catch(err => {
+        console.log('Failed to create token', err);
+        res.status(404).send();
+      })
+    }).catch(err => {
+      res.status(400).send(err);
+    })
+  }
+
+  login2(req, res) {
     db('users').then(collection => {
       const hashedPassword = getHashedPassword(req.body.password);
       collection.findOne({
