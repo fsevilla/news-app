@@ -1,5 +1,7 @@
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
+
 const url = process.env.DB_HOST;
 
 let clientConnection;
@@ -55,15 +57,17 @@ class DBModel {
     return collectionName;
   }
 
+  objectId(id) {
+    return ObjectID(id);
+  }
+
   find(filters, options) {
-    console.log('Will find ' + collectionName);
+    console.log('Will find ' + this.collectionName);
     filters = filters || {};
     options = getOptions(options, { limit: 100 });
 
     return new Promise((resolve, reject) => {
       let query = this.collection.find(filters);
-
-      console.log('Asked to find ' + collectionName);
 
       if(options.limit) {
         query = query.limit(options.limit);
@@ -86,6 +90,13 @@ class DBModel {
     return this.collection.findOne(filters);
   }
 
+  findById(id) {
+    console.log('Will find id ' + id + ' in ' + this.collectionName);
+    return this.collection.findOne({
+      '_id': ObjectID(id)
+    });
+  }
+
   create(data, options) {
     data = data || {};
     console.log('Will insert: ', data, this.collectionName);
@@ -98,6 +109,18 @@ class DBModel {
     }
 
     return this.collection.insertOne(data);
+  }
+
+  updateOne(filters, document, options) {
+    console.log('Will update one in ' + this.collectionName);
+    options = getOptions(options, { upsert: false });
+    filters = filters || {};
+    return this.collection.updateOne(filters, document, options);
+  }
+
+  updateOrCreate(filters, document, options) {
+    options = getOptions(options, { upsert: true });
+    return this.collection.updateOne(filters, document, options);
   }
 }
 

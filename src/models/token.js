@@ -9,9 +9,11 @@ class Token extends DBModel {
   }
 
   validate(token, userId) {
+    const now = new Date().getTime();
     return this.findOne({
-      userId:userId,
-      token:token
+      userId:this.objectId(userId),
+      token:token,
+      expire_date: { $gt: now }
     });
   }
 
