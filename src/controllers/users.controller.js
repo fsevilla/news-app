@@ -43,7 +43,7 @@ class UserController {
         res.send(tokenResult.ops[0]);
       }).catch(err => {
         console.log('Failed to create token', err);
-        res.status(404).send();
+        res.status(400).send();
       })
     }).catch(err => {
       res.status(400).send(err);
@@ -81,6 +81,7 @@ class UserController {
     db('users').then(collection => {
       const hashedPassword = getHashedPassword(req.body.password);
       collection.insertOne({
+        name: req.body.name,
         email:req.body.email,
         password:hashedPassword
       }).then(result => {
