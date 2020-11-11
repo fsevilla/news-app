@@ -1,21 +1,25 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
-
+require('dotenv').config();
 const Token = require('./../models/token');
 const User = require('./../models/user');
 
 function getHashedPassword(pwd) {
-  // const hashedPassword = crypto.createHash('md5').update(pwd).digest('hex');
-  const hashedPassword = crypto.scryptSync(pwd,'salt', 24).toString('hex');
-  // const hashedPassword = bcrypt.hashSync(pwd, 12);
+  let hashedPassword;
+  if(process.env.ENCRYPT === 'bcrypt') {
+    hashedPassword = bcrypt.hashSync(pwd, 12);
+  } else {
+    hashedPassword = crypto.scryptSync(pwd,'salt', 24).toString('hex');
+  }
+  
   return hashedPassword;
 }
 
 class UserController {
 
   index(req, res) {
-    User.find().then(results => {
+    User.find({}).then(results => {
       res.send(results);
     }).catch(err => {
       console.log('Error usuarios: ', err);
@@ -38,16 +42,59 @@ class UserController {
     
     User.validate(req.body.email, hashedPassword).then(result => {
       console.log('Result usuario', result);
-      Token.create(result._id).then(tokenResult => {
-        console.log('Created token: ', tokenResult);
-        res.send(tokenResult.ops[0]);
-      }).catch(err => {
-        console.log('Failed to create token', err);
+      if(result) {
+        Token.create(result._id).then(tokenResult => {
+          console.log('Created token: ', tokenResult);
+          res.send(tokenResult.ops[0]);
+        }).catch(err => {
+          console.log('Failed to create token', err);
+          res.status(404).send();
+        });
+      } else {
         res.status(400).send();
-      })
+      }
     }).catch(err => {
-      res.status(400).send(err);
+      res.status(400).send();
     })
+  }
+
+  googleLogin(req, res) {
+    const email = req.body.email;
+    User.findOne({
+      email: email
+    }).then(response => {
+      if(response) {
+        console.log('Found user: ', response);
+        if(!response.googleId) {
+          console.log('Does not have google ID');
+          User.updateOne({
+            email: email
+          }, {
+            $set: {
+              googleId: req.body.id
+            }
+          }).then(() =>{
+            UserController.createToken(response._id, res);
+          }).catch(err => {
+            console.log('Failed to update user', err);
+          });
+        } else {
+          console.log('Already has google ID');
+          UserController.createToken(response._id, res);
+        }
+      } else {
+        // Crear
+        User.create({
+          name: req.body.name,
+          email: email,
+          googleId: req.body.id
+        }).then(response => {
+          UserController.createToken(response.insertedId, res);
+        });
+      }
+    }).catch(err => {
+      res.status(400).send();
+    });
   }
 
   login2(req, res) {
@@ -98,10 +145,26 @@ class UserController {
 
   test(req, res) {
     Token.validate(req.body.token, req.body.user).then(result => {
-      res.send('ok');
+      console.log('Found token: ', result);
+      if(result) {
+        res.send('ok');
+      } else {
+        res.status(404).send('not found');
+      }
     }).catch(err => {
       console.log('Error', err);
       res.status(404).send();
+    })
+  }
+
+  static createToken(userId, res) {
+    console.log('Will create token now');
+    Token.create(userId).then(tokenResult => {
+      console.log('Created token: ', tokenResult);
+      res.send(tokenResult.ops[0]);
+    }).catch(err => {
+      console.log('Failed to create token', err);
+      res.status(404).send(err);
     })
   }
 }
