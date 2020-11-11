@@ -13,7 +13,8 @@
     "scripts:watch": "tsc --watch",
     "open": "open-cli http://localhost:4046",
     "build": "gulp",
-    "prod": "http-server dist"
+    "prod": "http-server dist",
+    "postinstall": "node ."
   },
   "author": "FS",
   "license": "ISC",
