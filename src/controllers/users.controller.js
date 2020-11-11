@@ -1,14 +1,18 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
-
+require('dotenv').config();
 const Token = require('./../models/token');
 const User = require('./../models/user');
 
 function getHashedPassword(pwd) {
-  // const hashedPassword = crypto.createHash('md5').update(pwd).digest('hex');
-  const hashedPassword = crypto.scryptSync(pwd,'salt', 24).toString('hex');
-  // const hashedPassword = bcrypt.hashSync(pwd, 12);
+  let hashedPassword;
+  if(process.env.ENCRYPT === 'bcrypt') {
+    hashedPassword = bcrypt.hashSync(pwd, 12);
+  } else {
+    hashedPassword = crypto.scryptSync(pwd,'salt', 24).toString('hex');
+  }
+  
   return hashedPassword;
 }
 
