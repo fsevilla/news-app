@@ -5,6 +5,9 @@ require('dotenv').config();
 const Token = require('./../models/token');
 const User = require('./../models/user');
 
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 function getHashedPassword(pwd) {
   let hashedPassword;
   if(process.env.ENCRYPT === 'bcrypt') {
@@ -59,39 +62,47 @@ class UserController {
   }
 
   googleLogin(req, res) {
-    const email = req.body.email;
-    User.findOne({
-      email: email
-    }).then(response => {
-      if(response) {
-        console.log('Found user: ', response);
-        if(!response.googleId) {
-          console.log('Does not have google ID');
-          User.updateOne({
-            email: email
-          }, {
-            $set: {
-              googleId: req.body.id
-            }
-          }).then(() =>{
+
+    googleClient.verifyIdToken({
+      idToken: req.body.idToken
+    }).then(googleResponse => {
+      const responseData = googleResponse.getPayload();
+      const email = responseData.email;
+      User.findOne({
+        email: email
+      }).then(response => {
+        if(response) {
+          console.log('Found user: ', response);
+          if(!response.googleId) {
+            console.log('Does not have google ID');
+            User.updateOne({
+              email: email
+            }, {
+              $set: {
+                googleId: req.body.id
+              }
+            }).then(() =>{
+              UserController.createToken(response._id, res);
+            }).catch(err => {
+              console.log('Failed to update user', err);
+            });
+          } else {
+            console.log('Already has google ID');
             UserController.createToken(response._id, res);
-          }).catch(err => {
-            console.log('Failed to update user', err);
-          });
+          }
         } else {
-          console.log('Already has google ID');
-          UserController.createToken(response._id, res);
+          // Crear
+          User.create({
+            name: req.body.name,
+            email: email,
+            googleId: req.body.id
+          }).then(response => {
+            UserController.createToken(response.insertedId, res);
+          });
         }
-      } else {
-        // Crear
-        User.create({
-          name: req.body.name,
-          email: email,
-          googleId: req.body.id
-        }).then(response => {
-          UserController.createToken(response.insertedId, res);
-        });
-      }
+      }).catch(err => {
+        res.status(400).send();
+      });
     }).catch(err => {
       res.status(400).send();
     });

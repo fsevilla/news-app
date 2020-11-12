@@ -86,7 +86,7 @@ class DBModel {
   findOne(filters, options) {
     console.log('Will find one in ' + this.collectionName);
     filters = filters || {};
-    console.log('Filters: ', filters);
+    // console.log('Filters: ', filters);
     return this.collection.findOne(filters);
   }
 
