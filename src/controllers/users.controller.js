@@ -1,7 +1,9 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const db = require('./db.controller');
-require('dotenv').config();
+if(process.env.NODE_ENV==='dev') {
+  require('dotenv').config();
+}
 const Token = require('./../models/token');
 const User = require('./../models/user');
 

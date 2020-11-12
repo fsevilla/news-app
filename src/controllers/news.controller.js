@@ -1,5 +1,7 @@
 const axios = require('axios');
-require('dotenv').config();
+if(process.env.NODE_ENV==='dev') {
+  require('dotenv').config();
+}
 
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;

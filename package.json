@@ -14,15 +14,21 @@
     "open": "open-cli http://localhost:4046",
     "build": "gulp",
     "prod": "http-server dist",
+    "serve": "cross-env NODE_ENV=dev nodemon .",
     "postinstall": "node ."
   },
   "author": "FS",
   "license": "ISC",
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "browserify": "^16.5.2",
+    "cross-env": "^7.0.2",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-cli": "^2.3.0",

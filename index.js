@@ -12,7 +12,9 @@ const news = require('./news');
 
 const apiNews = require('./api');
 
-require('dotenv').config();
+if(process.env.NODE_ENV==='dev') {
+  require('dotenv').config();
+}
 
 require('./src/controllers/db.controller');
 
