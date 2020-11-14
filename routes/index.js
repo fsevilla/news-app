@@ -37,8 +37,8 @@ router.get('/domains', authMiddleware, newsController.getSources);
 router.get('/news/:noticiaID', newsController.getById);
 
 // Movies
-router.get('/movies', moviesController.index);
-router.get('/movies/:id', moviesController.getOne);
+router.get('/movies', authMiddleware, moviesController.index);
+router.get('/movies/:id', authMiddleware, moviesController.getOne);
 
 
 module.exports = router;
