@@ -1,6 +1,6 @@
 {
   "name": "news-app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "news from newsapi.org",
   "main": "index.js",
   "scripts": {
