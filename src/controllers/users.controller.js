@@ -66,7 +66,7 @@ class UserController {
   googleLogin(req, res) {
 
     googleClient.verifyIdToken({
-      idToken: req.body.idToken
+      token: req.body.idToken
     }).then(googleResponse => {
       const responseData = googleResponse.getPayload();
       const email = responseData.email;
