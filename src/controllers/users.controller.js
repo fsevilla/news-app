@@ -64,11 +64,11 @@ class UserController {
   }
 
   googleLogin(req, res) {
-
     googleClient.verifyIdToken({
-      token: req.body.idToken
+      idToken: req.body.idToken
     }).then(googleResponse => {
       const responseData = googleResponse.getPayload();
+      console.log('Response payload: ', responseData);
       const email = responseData.email;
       User.findOne({
         email: email
@@ -106,6 +106,7 @@ class UserController {
         res.status(400).send();
       });
     }).catch(err => {
+      console.log('ERror: ', err);
       res.status(400).send();
     });
   }
