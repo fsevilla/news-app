@@ -38,9 +38,34 @@ app.use('/api', jsonParser);
 app.use('/api', apiRoutes);
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('App is running in port ' + port);
 });
 
+const socketIo = require('socket.io');
+
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST'],
+    allowHeaders: ['Authorization'],
+    credentials: true
+  }
+});
 
 
+io.on('connection', socket => {
+
+  const authToken = socket.handshake.headers['authorization'];
+
+  console.log('Se ha conectado', authToken);
+
+  socket.join('admins');
+
+  socket.on('likedNews', data => {
+    console.log('News liked: ', data);
+
+    // io.to('admins').emit('userLikedNews', data);
+    socket.broadcast.emit('userLikedNews', data);
+  })
+})
